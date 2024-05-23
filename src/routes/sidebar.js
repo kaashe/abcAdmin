@@ -1,4 +1,7 @@
 import Squares2X2Icon from "@heroicons/react/24/outline/Squares2X2Icon";
+import { TbUsersPlus } from "react-icons/tb";
+import { TbBrandProducthunt } from "react-icons/tb";
+
 const iconClasses = `h-6 w-6`;
 
 let routes = [
@@ -7,7 +10,16 @@ let routes = [
     icon: <Squares2X2Icon className={iconClasses} />,
     name: "Dashboard",
   },
-
+  {
+    path: "/app/users",
+    icon: <TbUsersPlus className={iconClasses} />,
+    name: "Users",
+  },
+  {
+    path: "/app/products",
+    icon: <TbBrandProducthunt className={iconClasses} />,
+    name: "Products",
+  },
 ];
 
 

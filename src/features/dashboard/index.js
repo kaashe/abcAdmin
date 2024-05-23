@@ -6,21 +6,15 @@ import ProductsCard from "../../components/Cards/ProductsCard";
 
 const statsData = [
   {
-    title: "Original Balance",
-    value: "0",
+    title: "Pending Users",
+    value: "10",
     icon: <BuildingStorefrontIcon className="w-8 h-8" />,
     description: "",
   },
   {
-    title: "Trial Balance",
+    title: "Pending Products",
     value: "0",
     icon: <CreditCardIcon className="w-8 h-8" />,
-    description: "",
-  },
-  {
-    title: "Rewards & Bonus",
-    value: "0",
-    icon: <CircleStackIcon className="w-8 h-8" />,
     description: "",
   },
 ];
@@ -49,19 +43,19 @@ function Dashboard() {
   return (
     <>
       {/** ---------------------- Balance & Rewards Section ------------------------- */}
-      <div className="grid lg:grid-cols-4 mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+      <div className="grid lg:grid-cols-2 mt-2 md:grid-cols-2 grid-cols-1 gap-6">
         {statsData.map((d, k) => {
           return <DashboardStats key={k} {...d} colorIndex={k} />;
         })}
       </div>
 
       {/** ---------------------- Products Cards Section ------------------------- */}
-      <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
+      {/* <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
       {productsData.map((d, k) => {
           return <ProductsCard key={k} {...d} colorIndex={k} />;
         })}
       
-      </div>
+      </div> */}
     </>
   );
 }
