@@ -18,15 +18,7 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
       applySearch(searchText);
     }
   }, [searchText, applySearch, removeAppliedFilter]);
-  const AddProduct = () => {
-    dispatch(
-      openModal({
-        title: "Add Product",
-        bodyType: MODAL_BODY_TYPES.ADD_PRODUCT,
-        extraObject: {},
-      })
-    );
-  };
+ 
   return (
     <div className="inline-block float-right">
       <SearchBar
@@ -34,39 +26,39 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
         styleClass="mr-4"
         setSearchText={setSearchText}
       />
-      <button
+      {/* <button
         className="btn px-6 btn-sm normal-case btn-primary"
-        onClick={() => AddProduct()}
+        onClick={() => addSize()}
       >
         Add
-      </button>
+      </button> */}
     </div>
   );
 };
 
-function Products() {
+function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
 
-  // Dummy data for products
-  const dummyProducts = [
-    { id: 1, name: "Product 1", price: 10,  },
-    { id: 2, name: "Product 2", price: 20, },
-    { id: 3, name: "Product 3", price: 30,  },
-    { id: 4, name: "Product 4", price: 40,  },
-    { id: 5, name: "Product 5", price: 50, },
-    { id: 6, name: "Product 6", price: 60,  },
-    { id: 7, name: "Product 7", price: 70, },
-    { id: 8, name: "Product 8", price: 80,  },
-    { id: 9, name: "Product 9", price: 90, },
-    { id: 10, name: "Product 10", price: 100,  },
+  // Dummy data for users
+  const dummyUsers = [
+    { id: 1, name: "John Doe", status: true },
+    { id: 2, name: "Jane Smith", status: true },
+    { id: 3, name: "Alice Johnson", status: true },
+    { id: 4, name: "Chris Lee", status: false },
+    { id: 5, name: "Emily Davis", status: true },
+    { id: 6, name: "Michael Brown", status: false },
+    { id: 7, name: "Jessica Wilson", status: true },
+    { id: 8, name: "Daniel Martinez", status: false },
+    { id: 9, name: "Laura Garcia", status: true },
+    { id: 10, name: "David Anderson", status: false },
   ];
 
-  const [products, setProducts] = useState(dummyProducts);
+  const [roles, setRoles] = useState(dummyUsers);
 
   const removeFilter = useCallback(() => {
-    setProducts(dummyProducts);
-  }, [dummyProducts]);
+    setRoles(dummyUsers);
+  }, [dummyUsers]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -74,24 +66,22 @@ function Products() {
 
   const applySearch = useCallback(
     (value) => {
-      let filteredData = dummyProducts.filter((item) =>
+      let filteredData = dummyUsers.filter((item) =>
         item.name.toLowerCase().includes(value.toLowerCase())
       );
-      setProducts(filteredData);
+      setRoles(filteredData);
     },
-    [dummyProducts]
+    [dummyUsers]
   );
-
-  const handleOnRowClick = (product) => {
+  const handleOnRowClick = () => {
     dispatch(
       openModal({
-        title: "Product Details",
-        bodyType: MODAL_BODY_TYPES.ADD_PRODUCT,
-        extraObject: product,
+        title: "User Details",
+        bodyType: MODAL_BODY_TYPES.ADD_SIZE,
+        extraObject: {},
       })
     );
   };
-
   return (
     <>
       <TitleCard
@@ -109,23 +99,21 @@ function Products() {
             <thead>
               <tr>
                 <th>Sr#</th>
-                <th>Product Name</th>
-                <th>Price</th>
+                <th>User Name</th>
+                <th>Activate</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((product, index) => (
-                <tr
-                  key={index}
-                  className="cursor-pointer hover"
-                  onClick={() => handleOnRowClick(product)}
-                >
-                  <td>{index + 1}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-               
-                </tr>
-              ))}
+              {roles.map((role, index) => {
+                return (
+                  <tr key={index} className="cursor-pointer hover">
+                    <td>{index + 1}</td>
+                    <td>{role.name}</td>
+                    <td>
+                  <input type="checkbox" className="toggle toggle-sm toggle-success"  /></td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -134,4 +122,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default Users;

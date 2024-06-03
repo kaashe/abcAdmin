@@ -1,7 +1,9 @@
 import { MODAL_BODY_TYPES } from "../utils/globalConstantUtil";
 import { useSelector, useDispatch } from "react-redux";
 import { closeModal } from "../features/common/modalSlice";
-import ConfirmationModalBody from "../features/common/components/ConfirmationModalBody";
+import AddRolesModalBody from "../features/roles/roles/components/AddRolesModalBody";
+import AddProductModalBody from "../features/products/components/AddProductModalBody";
+import ActiveteUserModalBody from "../features/users/component/ActiveteUserModalBody";
 function ModalLayout() {
   const { isOpen, bodyType, size, extraObject, title } = useSelector(
     (state) => state.modal
@@ -28,14 +30,25 @@ function ModalLayout() {
           {
             {
               
-             
-              [MODAL_BODY_TYPES.CONFIRMATION]: (
-                <ConfirmationModalBody
+              [MODAL_BODY_TYPES.ABDAR]: (
+                <AddRolesModalBody
                   closeModal={close}
                   extraObject={extraObject}
                 />
               ),
-
+              [MODAL_BODY_TYPES.ADD_PRODUCT]: (
+                <AddProductModalBody
+                  closeModal={close}
+                  extraObject={extraObject}
+                />
+              ),
+              [MODAL_BODY_TYPES.ADD_SIZE]: (
+                <ActiveteUserModalBody
+                  closeModal={close}
+                  extraObject={extraObject}
+                />
+              ),
+              
               [MODAL_BODY_TYPES.DEFAULT]: <div></div>,
             }[bodyType]
           }
