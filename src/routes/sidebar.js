@@ -16,6 +16,11 @@ let routes = [
     name: "Products",
   },
   {
+    path: "/app/products-category",
+    icon: <TbBrandProducthunt className={iconClasses} />,
+    name: "Products Category",
+  },
+  {
     path: "/app/size",
     icon: <FiUserCheck className={iconClasses} />,
     name: "Users",

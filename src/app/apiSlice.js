@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://justfashionapp.com/v1/",
+    baseUrl:  "https://commerce-api.codematesolution.com/api/v1/",
     prepareHeaders: (headers, { getState }) => {
       const token = localStorage.getItem('access_token');
       
@@ -16,7 +16,7 @@ export const apiSlice = createApi({
   }),
   refetchOnFocus: false,
   refetchOnReconnect: true,
-  tagTypes: ["Login", "VerifyByOtp", "members","products"],
+  tagTypes: ["Login", "products","categories","users"],
   endpoints: (builder) => ({
     // your endpoints here
   }),

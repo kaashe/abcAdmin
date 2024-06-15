@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+import ProductCategory from '../features/products/product-category';
 const Dashboard = lazy(() => import('../pages/protected/Dashboard'));
 const Products = lazy(() => import('../pages/protected/Products'));
 const Users = lazy(() => import('../pages/protected/Users'));
@@ -9,12 +10,16 @@ let routes = [
   },
   {
     path: '/products',
-    component: Products, 
+    component: Products,
+  },
+  {
+    path: '/products-category',
+    component: ProductCategory,
   },
   {
     path: '/size',
-    component: Users, 
+    component: Users,
   },
-  
+
 ];
 export default routes

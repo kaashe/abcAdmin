@@ -7,6 +7,7 @@ import {
 import TitleCard from "../../components/Cards/TitleCard";
 import { openModal } from "../common/modalSlice";
 import SearchBar from "../../components/Input/SearchBar";
+import { useGetUsersQuery } from "./usersSlice";
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -38,6 +39,7 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 
 function Users() {
   const [currentPage, setCurrentPage] = useState(1);
+  const {data,refetch} = useGetUsersQuery();
   const dispatch = useDispatch();
 
   // Dummy data for users
@@ -73,6 +75,13 @@ function Users() {
     },
     [dummyUsers]
   );
+  const handleStatus = async (item, event) => {
+    event.stopPropagation();
+    const payload = {
+      isActive: item?.isActive === true ? false : true,
+    };
+    // await updateSingleAdBanner(item?.id, payload);
+  };
   const handleOnRowClick = () => {
     dispatch(
       openModal({

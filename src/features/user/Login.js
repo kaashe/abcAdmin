@@ -17,19 +17,23 @@ function Login() {
     },
   });
   const submitForm = async (data) => {
-    // await login(data); 
-    window.location.href = "/app/dashboard";
-    localStorage.setItem('access_token','dummyToken')
+    try {
+      // await login(data);
+      localStorage.setItem('access_token', "DUMMY_TOKEN");
+      // localStorage.setItem('access_token', response?.token);
+      window.location.href = "/app/dashboard";
+    } catch (err) {
+      console.error('Error in form submission:', err);
+    }
   };
-  
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
       <>{isOpen && <ModalLayout />}</>
       <div className="card mx-auto w-full max-w-5xl  shadow-xl">
         <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
-          
-        <div className="">
+
+          <div className="">
             <LandingIntro />
           </div>
           <div className="py-20 px-10">
@@ -38,16 +42,13 @@ function Login() {
               <div className="mb-4">
                 <div className={`form-control w-full`}>
                   <InputText
-                    name="email"
-                    labelTitle="Email"
-                    containerStyle="mt-4"
+                    name="phone"
+                    type="tel"
+                    labelTitle="Phone"
+                    containerStyle="mt-1"
                     control={control}
                     rules={{
-                      required: "Email is required",
-                      pattern: {
-                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: "Invalid email format",
-                      },
+                      required: "Phone is required",
                     }}
                   />
                 </div>
@@ -75,7 +76,7 @@ function Login() {
               <ErrorText styleClass="mt-16">{error?.data?.message}</ErrorText>
             </form>
           </div>
-          
+
         </div>
       </div>
     </div>

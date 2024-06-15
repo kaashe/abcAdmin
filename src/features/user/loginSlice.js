@@ -4,11 +4,19 @@ export const loginSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         authenticateUser: builder.mutation({
             query: (initialPost) => ({
-                url: "brand-admin-auth/login",    
+                url: "users/login",    
                 method:'POST',
                 body:initialPost
             }),
             invalidatesTags: ['Login'],
+        }),
+        signUpUser: builder.mutation({
+            query: (initialPost) => ({
+                url: "users/signup",    
+                method:'POST',
+                body:initialPost
+            }),
+            invalidatesTags: ['sign-up'],
         }),
         verifyUserbyOtp: builder.mutation({
             query: (initialPost) => ({
@@ -21,4 +29,4 @@ export const loginSlice = apiSlice.injectEndpoints({
     }),
     
 });
-export const {useAuthenticateUserMutation,useVerifyUserbyOtpMutation} = loginSlice;
+export const {useAuthenticateUserMutation,useSignUpUserMutation,useVerifyUserbyOtpMutation} = loginSlice;

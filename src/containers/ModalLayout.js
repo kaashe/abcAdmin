@@ -4,6 +4,8 @@ import { closeModal } from "../features/common/modalSlice";
 import AddRolesModalBody from "../features/roles/roles/components/AddRolesModalBody";
 import AddProductModalBody from "../features/products/components/AddProductModalBody";
 import ActiveteUserModalBody from "../features/users/component/ActiveteUserModalBody";
+import AddProductCategoryModalBody from "../features/products/product-category/components/AddProductCategoryModalBody";
+
 function ModalLayout() {
   const { isOpen, bodyType, size, extraObject, title } = useSelector(
     (state) => state.modal
@@ -38,6 +40,12 @@ function ModalLayout() {
               ),
               [MODAL_BODY_TYPES.ADD_PRODUCT]: (
                 <AddProductModalBody
+                  closeModal={close}
+                  extraObject={extraObject}
+                />
+              ),
+              [MODAL_BODY_TYPES.ADD_PRODUCT_CATEGORY]: (
+                <AddProductCategoryModalBody
                   closeModal={close}
                   extraObject={extraObject}
                 />
