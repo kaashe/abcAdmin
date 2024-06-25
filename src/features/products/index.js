@@ -7,10 +7,12 @@ import {
 import TitleCard from "../../components/Cards/TitleCard";
 import { openModal } from "../common/modalSlice";
 import SearchBar from "../../components/Input/SearchBar";
+import { useGetProductsQuery } from "./productsSlice";
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (searchText === "") {
       removeAppliedFilter();
@@ -18,7 +20,8 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
       applySearch(searchText);
     }
   }, [searchText, applySearch, removeAppliedFilter]);
-  const AddProduct = () => {
+
+  const AddProduct = useCallback(() => {
     dispatch(
       openModal({
         title: "Add Product",
@@ -26,7 +29,8 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
         extraObject: {},
       })
     );
-  };
+  }, [dispatch]);
+
   return (
     <div className="inline-block float-right">
       <SearchBar
@@ -36,7 +40,7 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
       />
       <button
         className="btn px-6 btn-sm normal-case btn-primary"
-        onClick={() => AddProduct()}
+        onClick={AddProduct}
       >
         Add
       </button>
@@ -45,28 +49,19 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 };
 
 function Products() {
+  const { data, refetch, isLoading, isError, error } = useGetProductsQuery();
+  const allProducts = data?.data?.products || [];
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
+  const [products, setProducts] = useState(allProducts);
 
-  // Dummy data for products
-  const dummyProducts = [
-    { id: 1, name: "Product 1", price: 10,  },
-    { id: 2, name: "Product 2", price: 20, },
-    { id: 3, name: "Product 3", price: 30,  },
-    { id: 4, name: "Product 4", price: 40,  },
-    { id: 5, name: "Product 5", price: 50, },
-    { id: 6, name: "Product 6", price: 60,  },
-    { id: 7, name: "Product 7", price: 70, },
-    { id: 8, name: "Product 8", price: 80,  },
-    { id: 9, name: "Product 9", price: 90, },
-    { id: 10, name: "Product 10", price: 100,  },
-  ];
-
-  const [products, setProducts] = useState(dummyProducts);
+  useEffect(() => {
+    setProducts(allProducts);
+  }, [allProducts]);
 
   const removeFilter = useCallback(() => {
-    setProducts(dummyProducts);
-  }, [dummyProducts]);
+    setProducts(allProducts);
+  }, [allProducts]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -74,20 +69,21 @@ function Products() {
 
   const applySearch = useCallback(
     (value) => {
-      let filteredData = dummyProducts.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
+      let filteredData = allProducts.filter((item) =>
+        item.productName.toLowerCase().includes(value.toLowerCase())
       );
       setProducts(filteredData);
     },
-    [dummyProducts]
+    [allProducts]
   );
 
   const handleOnRowClick = (product) => {
+    const productid = product?._id;
     dispatch(
       openModal({
-        title: "Product Details",
+        title: "Edit Product",
         bodyType: MODAL_BODY_TYPES.ADD_PRODUCT,
-        extraObject: product,
+        extraObject: { productid },
       })
     );
   };
@@ -105,29 +101,42 @@ function Products() {
         }
       >
         <div className="overflow-x-auto w-full">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>Sr#</th>
-                <th>Product Name</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product, index) => (
-                <tr
-                  key={index}
-                  className="cursor-pointer hover"
-                  onClick={() => handleOnRowClick(product)}
-                >
-                  <td>{index + 1}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-               
+          {isLoading ? (
+              <div className="flex justify-center items-center">
+              <span className="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+          ) : isError ? (
+            <div className="text-center py-4 text-red-500">
+              {error?.data?.message || "An error occurred"}
+            </div>
+          ) : (
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>Sr#</th>
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>Review %</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {products?.map((product, index) => (
+                  <tr
+                    key={index}
+                    className="cursor-pointer hover"
+                    onClick={() => handleOnRowClick(product)}
+                  >
+                    <td>{index + 1}</td>
+                    <td>{product.productName}</td>
+                    <td>{product.category.categoryName}</td>
+                    <td>{product.productReviewPercentage}</td>
+                    <td>{product.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </TitleCard>
     </>

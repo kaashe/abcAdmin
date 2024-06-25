@@ -18,9 +18,9 @@ function Login() {
   });
   const submitForm = async (data) => {
     try {
-      // await login(data);
-      localStorage.setItem('access_token', "DUMMY_TOKEN");
-      // localStorage.setItem('access_token', response?.token);
+     const response =  await login(data);
+      // localStorage.setItem('access_token', "DUMMY_TOKEN");
+      localStorage.setItem('access_token', response?.token);
       window.location.href = "/app/dashboard";
     } catch (err) {
       console.error('Error in form submission:', err);
