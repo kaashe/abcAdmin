@@ -7,6 +7,7 @@ import ToggleInput from "../../../../components/Input/ToogleInput";
 
 import { showNotification } from "../../../common/headerSlice";
 import InputText from "../../../../components/Input/InputText";
+import FileInput from "../../../../components/Input/FileInput";
 
 function AddProductCategoryModalBody({ closeModal }) {
   const dispatch = useDispatch();
@@ -37,15 +38,22 @@ function AddProductCategoryModalBody({ closeModal }) {
   const { control, handleSubmit, reset, setValue } = useForm();
 
   const onSubmit = async (formData) => {
+    let photoFileName = '';
+    if (formData?.photo && formData?.photo?.length > 0) {
+      photoFileName = formData?.photo[0]?.name;
+    }
     if (id) {
       const payload = {
-        name: formData?.name,
-        isActive: formData?.isActive,
-        nameAr: formData?.nameAr,
+        categoryName: formData?.name,
+        photo:photoFileName
       };
       await updateSingleCategory(id, payload);
     } else {
-      await category(formData);
+      const payload = {
+        categoryName: formData?.name,
+        photo:photoFileName
+      };
+      await category(payload);
     }
   };
 
@@ -104,7 +112,13 @@ function AddProductCategoryModalBody({ closeModal }) {
             control={control}
             rules={{ required: "Category name is required" }}
           />
-          
+          <FileInput
+            labelTitle="Upload Photo"
+            name="photo"
+            control={control}
+            rules={{ required: "Photo is required" }}
+            placeholder="Choose image..."
+          />
           {id && (
             <ToggleInput
               name="isActive"

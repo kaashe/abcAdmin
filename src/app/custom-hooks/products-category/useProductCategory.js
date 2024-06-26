@@ -1,11 +1,11 @@
-import { useAddCategoryMutation, useDeleteCategoryMutation, useGetCategoriesQuery, useUpdateCategoryMutation } from "../../../features/products/product-category/productCategorySlice";
+import { useAddCategoriesMutation, useDeleteCategoryMutation, useGetCategoriesQuery, useUpdateCategoryMutation } from "../../../features/products/product-category/productCategorySlice";
 
 
 export const useProductCategory = () => {
   const { refetch: refetchCategories } = useGetCategoriesQuery();
 
   const [addCategory, { isLoading, isSuccess, isError, error }] =
-    useAddCategoryMutation();
+  useAddCategoriesMutation();
   const [
     updateCategory,
     {

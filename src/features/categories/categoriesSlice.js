@@ -1,6 +1,6 @@
 import { apiSlice } from "../../app/apiSlice";
 
-export const categoriesSlice = apiSlice.injectEndpoints({
+export const categoriesSliceee = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getCategories: builder.query({
             query: (initialPost) => ({
@@ -42,4 +42,4 @@ export const categoriesSlice = apiSlice.injectEndpoints({
     }),
 
 });
-export const { useGetCategoriesQuery, useAddCategoriesMutation, } = categoriesSlice;
+export const { useGetCategoriesQuery, useAddCategoriesMutation, } = categoriesSliceee;

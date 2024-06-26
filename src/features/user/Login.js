@@ -5,6 +5,7 @@ import ModalLayout from "../../containers/ModalLayout";
 import { useLogin } from "../../app/custom-hooks/login/useLogin";
 import ErrorText from "../../components/Typography/ErrorText";
 import InputText from "../../components/Input/InputText";
+import { useEffect } from "react";
 
 function Login() {
   const { isOpen } = useSelector((state) => state.modal);
@@ -21,12 +22,17 @@ function Login() {
      const response =  await login(data);
       // localStorage.setItem('access_token', "DUMMY_TOKEN");
       localStorage.setItem('access_token', response?.token);
-      window.location.href = "/app/dashboard";
+     
     } catch (err) {
       console.error('Error in form submission:', err);
     }
   };
-
+useEffect(() => {
+  
+if(isSuccess){
+  window.location.href = "/app/dashboard";
+}
+}, [isSuccess]);
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
       <>{isOpen && <ModalLayout />}</>

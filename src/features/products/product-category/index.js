@@ -6,7 +6,7 @@ import {
   CONFIRMATION_MODAL_CLOSE_TYPES,
   MODAL_BODY_TYPES,
 } from "../../../utils/globalConstantUtil";
-import {useGetCategoriesQuery} from './productCategorySlice';
+import { useGetCategoriesQuery } from './productCategorySlice';
 import { openModal } from "../../common/modalSlice";
 import SearchBar from "../../../components/Input/SearchBar";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
@@ -50,8 +50,8 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 
 function ProductCategory() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isError, error } = useGetCategoriesQuery(currentPage);
-  const allCategories = data?.results;
+  const { data, isError, isLoading, error } = useGetCategoriesQuery(currentPage);
+  const allCategories = data?.data?.categories;
   const totalPages = data?.totalPages;
   const [categories, setCategories] = useState(allCategories);
   const dispatch = useDispatch();
@@ -70,7 +70,7 @@ function ProductCategory() {
   const applySearch = useCallback(
     (value) => {
       let filteredData = allCategories?.filter((item) =>
-        item?.name?.toLowerCase()?.includes(value?.toLowerCase())
+        item?.categoryName?.toLowerCase()?.includes(value?.toLowerCase())
       );
       setCategories(filteredData);
     },
@@ -113,51 +113,57 @@ function ProductCategory() {
           />
         }
       >
-        <div className="overflow-x-auto w-full h-screen flex flex-col">
+        <div className="overflow-x-auto w-full ">
           <div className="flex-grow overflow-auto">
-            <table className="table w-full">
-              <thead>
+            {isLoading ? (
+              <div className="flex justify-center items-center">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+              </div>
+            ) :
+              isError ? (
                 <tr>
-                  <th>Category Name</th>
-                  <th>Arabic Name</th>
-                  <th>Status</th>
+                  <td colSpan="4" className="text-center py-4">
+                    <ErrorText>
+                      {error?.data?.message || "An error occurred"}
+                    </ErrorText>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {isError ? (
-                  <tr>
-                    <td colSpan="4" className="text-center py-4">
-                      <ErrorText>
-                        {error?.data?.message || "An error occurred"}
-                      </ErrorText>
-                    </td>
-                  </tr>
-                ) : (
-                  categories?.map((item, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className="cursor-pointer hover"
-                        onClick={() => handleOnRowClick(item)}
-                      >
-                        <td>{item?.name}</td>
-                        <td>{item?.nameAr}</td>
-                        <td>{item?.isActive === true ? "Active" : "Inactive"}</td>
-
-                        <td>
-                          <button
-                            className="btn btn-xs btn-square btn-ghost"
-                            onClick={(event) => handleDelete(item?.id, event)}
+              ) : (
+                <table className="table w-full">
+                  <thead>
+                    <tr>
+                      <th>Category Name</th>
+                      <th>Arabic Name</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      categories?.map((item, index) => {
+                        return (
+                          <tr
+                            key={index}
+                            className="cursor-pointer hover"
+                            onClick={() => handleOnRowClick(item)}
                           >
-                            <TrashIcon className="w-5 text-error" />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                            <td>{item?.categoryName}</td>
+                            <td>{item?.status === true ? "Active" : "Inactive"}</td>
+
+                            <td>
+                              <button
+                                className="btn btn-xs btn-square btn-ghost"
+                                onClick={(event) => handleDelete(item?.id, event)}
+                              >
+                                <TrashIcon className="w-5 text-error" />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    }
+                  </tbody>
+                </table>
+              )}
           </div>
           <div className="flex-shrink-0 flex justify-center items-center">
             {totalPages > 1 && (

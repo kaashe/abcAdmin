@@ -12,7 +12,6 @@ function FileInput({
   placeholder,
   onChange
 }) {
-
   return (
     <div className={`form-control w-full ${containerStyle}`}>
       <label className="label">
@@ -25,7 +24,7 @@ function FileInput({
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ field: { value, ref }, fieldState: { error } }) => (
+        render={({ field: { onChange: fieldOnChange, ref }, fieldState: { error } }) => (
           <>
             <input
               ref={ref}
@@ -34,11 +33,14 @@ function FileInput({
                 error ? "input-error" : ""
               }`}
               placeholder={placeholder}
-              onChange={onChange}
+              onChange={(e) => {
+                fieldOnChange(e.target.files); // Update the field value
+                if (onChange) onChange(e); // Call the custom onChange handler if provided
+              }}
             />
-            {(error ) && (
+            {error && (
               <span className="label-text-alt text-error mt-1">
-                {error?.message}
+                {error.message}
               </span>
             )}
           </>

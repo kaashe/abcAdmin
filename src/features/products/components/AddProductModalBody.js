@@ -1,86 +1,99 @@
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import InputText from '../../../components/Input/InputText';
 import { useSelector } from 'react-redux';
 import { useGetSingleProductQuery } from '../productsSlice';
 import { useProduct } from '../../../app/custom-hooks/products/useproducts';
-import { useGetCategoriesQuery } from '../../categories/categoriesSlice';
 import SelectBox from '../../../components/Input/SelectBox';
+import TextAreaInput from '../../../components/Input/TextAreaInput';
+import ToggleInput from '../../../components/Input/ToogleInput';
+import FileInput from '../../../components/Input/FileInput';
+import { useGetCategoriesQuery } from '../product-category/productCategorySlice';
 
 const AddProductModalBody = ({ closeModal }) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-  } = useForm();
-  const { data:categories } = useGetCategoriesQuery();
+  const { control, handleSubmit, reset } = useForm();
+  const { data: categories } = useGetCategoriesQuery();
   const allCategory = categories?.data?.categories;
-    const caetogyOptions = allCategory
-  ? allCategory.map((cat) => ({
-    name: cat.categoryName,
-    value: cat._id,
-  }))
-  : [];
+  const categoryOptions = allCategory
+    ? allCategory.map((cat) => ({
+        name: cat.categoryName,
+        value: cat._id,
+      }))
+    : [];
+
   const {
     addProductHandler,
     refetchProducts,
     isLoading,
-    isSuccess,
-    isError,
-    error,
     updateSingleProduct,
     updateIsLoading,
-    updateIsSuccess,
-    updateIsError,
-    updateError,
   } = useProduct();
-  const { extraObject } = useSelector(
-    (state) => state.modal
-  );
+
+  const { extraObject } = useSelector((state) => state.modal);
   const id = extraObject?.productid;
-  const {
-    data,
-    isLoading: isSingleProductLoading,
-    isError: singleProductIsError,
-    error: singleProductError,
-    refetch: singleRoleReftch,
-  } = useGetSingleProductQuery(id, {
+
+  const { data, isLoading: isSingleProductLoading } = useGetSingleProductQuery(id, {
     skip: !id,
   });
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const onSubmit = async (formData) => {
+    let photoFileName = '';
+    if (formData.photo && formData.photo.length > 0) {
+      photoFileName = formData.photo[0].name;
+    }
+
+    const payload = {
+      productName: formData?.productName,
+      category: formData?.category,
+      productType: formData?.productType,
+      price: formData?.price,
+      description: formData?.description,
+      productModel: formData?.productModel,
+      status: formData?.status ? 'active' : 'inactive', // Ensure this matches your backend enum values
+      photo: photoFileName,
+    };
     if (id) {
-      const payload = { name: formData?.productName, categoryName: formData?.categoryName };
-      console.log(payload, "payload updata");
       await updateSingleProduct(id, payload);
     } else {
-      await addProductHandler(formData);
+      await addProductHandler(payload);
     }
+
+    refetchProducts();
+    closeModal();
   };
+
   useEffect(() => {
     if (data) {
       reset({
         ...data?.data?.product,
-        category: data?.data?.product?.category?._id
+        category: data?.data?.product?.category?._id,
+        status:data?.data?.product?.status==="inactive"?false:true,
       });
     }
   }, [data, reset]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="overflow-y-scroll max-h-[65vh] px-1">
       {isSingleProductLoading ? (
-        <>
-          <div className="flex justify-center items-center">
-            <span className="loading loading-spinner loading-lg text-primary"></span>
-          </div>
-        </>
+        <div className="flex justify-center items-center">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+        </div>
       ) : (
         <>
           <InputText
             name="productName"
             labelTitle="Name"
             control={control}
-            rules={{
-              required: "name is required",
-            }}
+            rules={{ required: "Name is required" }}
           />
           <SelectBox
             name="category"
@@ -88,9 +101,46 @@ const AddProductModalBody = ({ closeModal }) => {
             containerStyle="w-full mt-4"
             placeholder="Select a Category"
             labelStyle="my-label-style"
-            options={caetogyOptions} // Ensure this is in the correct format
+            options={categoryOptions}
             control={control}
             rules={{ required: "Category is required" }}
+          />
+          <InputText
+            name="productType"
+            labelTitle="Category Type"
+            control={control}
+            rules={{ required: "Category Type is required" }}
+          />
+          <InputText
+            name="price"
+            labelTitle="Price"
+            control={control}
+            rules={{ required: "Price is required" }}
+          />
+          <TextAreaInput
+            name="description"
+            labelTitle="Description"
+            control={control}
+            rules={{ required: "Description is required" }}
+          />
+          <InputText
+            name="productModel"
+            labelTitle="Product Model"
+            control={control}
+            rules={{ required: "Product Model is required" }}
+          />
+          <FileInput
+            labelTitle="Upload Photo"
+            name="photo"
+            control={control}
+            rules={{ required: "Photo is required" }}
+            placeholder="Choose image..."
+          />
+          <ToggleInput
+            name="status"
+            control={control}
+            className="toggle-sm"
+            labelTitle="Status"
           />
         </>
       )}
@@ -98,20 +148,20 @@ const AddProductModalBody = ({ closeModal }) => {
         <button
           type="button"
           className="btn btn-sm btn-glass"
-          onClick={() => closeModal()}
+          onClick={closeModal}
         >
           Cancel
         </button>
         <button
           type="submit"
-          // disabled={isLoading || updateIsLoading}
+          disabled={isLoading || updateIsLoading}
           className="btn btn-sm btn-primary px-6"
         >
           Save
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default AddProductModalBody
+export default AddProductModalBody;
