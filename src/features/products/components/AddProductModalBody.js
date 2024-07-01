@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import InputText from '../../../components/Input/InputText';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGetSingleProductQuery } from '../productsSlice';
 import { useProduct } from '../../../app/custom-hooks/products/useproducts';
 import SelectBox from '../../../components/Input/SelectBox';
@@ -9,8 +9,10 @@ import TextAreaInput from '../../../components/Input/TextAreaInput';
 import ToggleInput from '../../../components/Input/ToogleInput';
 import FileInput from '../../../components/Input/FileInput';
 import { useGetCategoriesQuery } from '../product-category/productCategorySlice';
+import { showNotification } from '../../common/headerSlice';
 
 const AddProductModalBody = ({ closeModal }) => {
+  const dispatch = useDispatch();
   const { control, handleSubmit, reset } = useForm();
   const { data: categories } = useGetCategoriesQuery();
   const allCategory = categories?.data?.categories;
@@ -24,7 +26,7 @@ const AddProductModalBody = ({ closeModal }) => {
   const {
     addProductHandler,
     refetchProducts,
-    isLoading,
+    isLoading,isSuccess,
     updateSingleProduct,
     updateIsLoading,
   } = useProduct();
@@ -80,7 +82,11 @@ const AddProductModalBody = ({ closeModal }) => {
       });
     }
   }, [data, reset]);
-
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(showNotification({ message: "Product Created!", status: 1 }));
+    }
+  }, [isSuccess,dispatch]);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="overflow-y-scroll max-h-[65vh] px-1">
       {isSingleProductLoading ? (

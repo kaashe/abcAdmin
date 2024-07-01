@@ -9,6 +9,7 @@ import { openModal } from "../common/modalSlice";
 import SearchBar from "../../components/Input/SearchBar";
 import { useGetUsersQuery } from "./usersSlice";
 import { useUsers } from "../../app/custom-hooks/users/useUsers";
+import { showNotification } from "../common/headerSlice";
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -41,11 +42,11 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
-  const { data: usersData,isLoading,isError,error } = useGetUsersQuery();
+  const { data: usersData, isLoading, isError, error } = useGetUsersQuery();
   const allUsers = usersData?.data?.data;
   console.log(allUsers, 'all users');
   // Dummy data for users
-  const { updateSingleUser, updateIsLoading } = useUsers();
+  const { updateSingleUser, updateIsLoading,updateIsSuccess } = useUsers();
   const [users, setUsers] = useState(allUsers);
 
   const removeFilter = useCallback(() => {
@@ -66,12 +67,13 @@ function Users() {
     [allUsers]
   );
   const handleStatus = async (item, event) => {
-    console.log(item);
+    console.log(item, 'user');
     event.stopPropagation();
     const payload = {
       activate: item?.isApproved === true ? false : true,
+      isApproved: item?.isApproved === true ? false : true
     };
-    await updateSingleUser(item?.id, payload);
+    await updateSingleUser(item?._id, payload);
   };
   const handleOnRowClick = () => {
     dispatch(
@@ -82,6 +84,11 @@ function Users() {
       })
     );
   };
+  useEffect(() => {
+    if (updateIsSuccess) {
+      dispatch(showNotification({ message: "User Updated!", status: 1 }));
+    }
+  }, [updateIsSuccess,dispatch]);
   return (
     <>
       <TitleCard
@@ -136,7 +143,7 @@ function Users() {
                         <input
                           type="checkbox"
                           className="toggle toggle-sm toggle-success"
-                          // disabled={updateIsLoading}
+                          disabled={updateIsLoading}
                           checked={user?.isApproved === true}
                           onClick={(event) => handleStatus(user, event)}
                         />
