@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import ModalLayout from "../../containers/ModalLayout";
 import { useLogin } from "../../app/custom-hooks/login/useLogin";
 import ErrorText from "../../components/Typography/ErrorText";
+import { TbReload } from "react-icons/tb";
 import InputText from "../../components/Input/InputText";
 import { useEffect } from "react";
 
@@ -77,7 +78,7 @@ if(isSuccess){
                 disabled={isLoading}
                 className="btn mt-2 w-full btn-primary"
               >
-                {isLoading === false ? "Login" : "Login..."}
+                {isLoading === false ? "Login" : "Login..."} <span>{isLoading&& <TbReload className={"animate-spin mt-1"}/>}</span>
               </button>
               <ErrorText styleClass="mt-16">{error?.data?.message}</ErrorText>
             </form>
