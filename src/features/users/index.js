@@ -21,6 +21,15 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
       applySearch(searchText);
     }
   }, [searchText, applySearch, removeAppliedFilter]);
+  const addNewRole = () => {
+    dispatch(
+      openModal({
+        title: "Add USer",
+        bodyType: MODAL_BODY_TYPES.ADD_USER,
+        extraObject: {},
+      })
+    );
+  };
 
   return (
     <div className="inline-block float-right">
@@ -29,24 +38,22 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
         styleClass="mr-4"
         setSearchText={setSearchText}
       />
-      {/* <button
+      <button
         className="btn px-6 btn-sm normal-case btn-primary"
-        onClick={() => addSize()}
+        onClick={() => addNewRole()}
       >
         Add
-      </button> */}
+      </button>
     </div>
   );
 };
-
 function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const { data: usersData, isLoading, isError, error } = useGetUsersQuery();
   const allUsers = usersData?.data?.data;
-  console.log(allUsers, 'all users');
   // Dummy data for users
-  const { updateSingleUser, updateIsLoading,updateIsSuccess } = useUsers();
+  const { updateSingleUser, updateIsLoading, updateIsSuccess } = useUsers();
   const [users, setUsers] = useState(allUsers);
 
   const removeFilter = useCallback(() => {
@@ -59,28 +66,30 @@ function Users() {
 
   const applySearch = useCallback(
     (value) => {
-      let filteredData = allUsers.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
+      let filteredData = allUsers?.filter((item) =>
+        item.fullname.toLowerCase().includes(value.toLowerCase())
       );
       setUsers(filteredData);
     },
     [allUsers]
   );
   const handleStatus = async (item, event) => {
-    console.log(item, 'user');
+    console.log(item, "user");
     event.stopPropagation();
     const payload = {
       activate: item?.isApproved === true ? false : true,
-      isApproved: item?.isApproved === true ? false : true
+      isApproved: item?.isApproved === true ? false : true,
     };
     await updateSingleUser(item?._id, payload);
   };
-  const handleOnRowClick = () => {
+  const handleOnRowClick = (user) => {
+    const userId = user?._id;
     dispatch(
       openModal({
-        title: "User Details",
-        bodyType: MODAL_BODY_TYPES.ADD_SIZE,
-        extraObject: {},
+        title: "Edit User",
+        bodyType: MODAL_BODY_TYPES.ADD_USER,
+        extraObject: { userId },
+        // size: "lg",
       })
     );
   };
@@ -88,7 +97,7 @@ function Users() {
     if (updateIsSuccess) {
       dispatch(showNotification({ message: "User Updated!", status: 1 }));
     }
-  }, [updateIsSuccess,dispatch]);
+  }, [updateIsSuccess, dispatch]);
   return (
     <>
       <TitleCard
@@ -110,50 +119,57 @@ function Users() {
             <div className="text-center py-4 text-red-500">
               {error?.data?.message || "An error occurred"}
             </div>
-          ) : (<table className="table w-full">
-            <thead>
-              <tr>
-                <th>Sr#</th>
-                <th>User Name</th>
-                <th>Balance</th>
-                <th>Role</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users?.map((user, index) => {
-                return (
-                  <tr key={index} className="cursor-pointer hover">
-                    <td>{index + 1}</td>
-                    <td>{user.fullname}</td>
-                    <td>{user.balance}</td>
-                    <td>{user.role}</td>
-                    <td>
-                      <div
-                        className={`tooltip ${user?.isActive === true
-                          ? "tooltip-error"
-                          : "tooltip-success"
+          ) : (
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>Sr#</th>
+                  <th>User Name</th>
+                  <th>Balance</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users?.map((user, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className="cursor-pointer hover"
+                      onClick={() => handleOnRowClick(user)}
+                    >
+                      <td>{index + 1}</td>
+                      <td>{user.fullname}</td>
+                      <td>{user.balance}</td>
+                      <td>{user.role}</td>
+                      <td>
+                        <div
+                          className={`tooltip ${
+                            user?.isActive === true
+                              ? "tooltip-error"
+                              : "tooltip-success"
                           }`}
-                      // data-tip={
-                      //   user?.isActive === true
-                      //     ? `Make ${user?.type?.name} Inactive`
-                      //     : `Make ${user?.type?.name} Active`
-                      // }
-                      >
-                        <input
-                          type="checkbox"
-                          className="toggle toggle-sm toggle-success"
-                          disabled={updateIsLoading}
-                          checked={user?.isApproved === true}
-                          onClick={(event) => handleStatus(user, event)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>)}
+                          // data-tip={
+                          //   user?.isActive === true
+                          //     ? `Make ${user?.type?.name} Inactive`
+                          //     : `Make ${user?.type?.name} Active`
+                          // }
+                        >
+                          <input
+                            type="checkbox"
+                            className="toggle toggle-sm toggle-success"
+                            disabled={updateIsLoading}
+                            checked={user?.isApproved === true}
+                            onClick={(event) => handleStatus(user, event)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </TitleCard>
     </>

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { closeModal } from "../features/common/modalSlice";
 import AddRolesModalBody from "../features/roles/roles/components/AddRolesModalBody";
 import AddProductModalBody from "../features/products/components/AddProductModalBody";
-import ActiveteUserModalBody from "../features/users/component/ActiveteUserModalBody";
+import AddUserModalBody from "../features/users/component/AddUserModalBody";
 import AddProductCategoryModalBody from "../features/products/product-category/components/AddProductCategoryModalBody";
 
 function ModalLayout() {
@@ -31,7 +31,6 @@ function ModalLayout() {
           {/* Loading modal body according to different modal type */}
           {
             {
-              
               [MODAL_BODY_TYPES.ABDAR]: (
                 <AddRolesModalBody
                   closeModal={close}
@@ -50,13 +49,13 @@ function ModalLayout() {
                   extraObject={extraObject}
                 />
               ),
-              [MODAL_BODY_TYPES.ADD_SIZE]: (
-                <ActiveteUserModalBody
+              [MODAL_BODY_TYPES.ADD_USER]: (
+                <AddUserModalBody
                   closeModal={close}
                   extraObject={extraObject}
                 />
               ),
-              
+
               [MODAL_BODY_TYPES.DEFAULT]: <div></div>,
             }[bodyType]
           }
