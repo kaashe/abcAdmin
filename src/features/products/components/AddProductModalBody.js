@@ -64,28 +64,19 @@ const AddProductModalBody = ({ closeModal }) => {
 
     for (const key in formData) {
       if (key === "photo" && formData[key][0]) {
-        data.append("photo", formData[key][0]); // Append the file directly
+        data.append("photo", formData[key][0]); // Append the file directly to FormData
+      } else if (key === "category") {
+        data.append("category", String(formData[key])); // Ensure category is converted to string
       } else {
-        data.append(key, formData[key]);
+        data.append(key, formData[key]); // Append other form fields to FormData
       }
     }
-
-    const payload = {
-      productName: formData?.productName,
-      category: String(formData?.category),
-      productType: formData?.productType,
-      price: formData?.price,
-      description: formData?.description,
-      productModel: formData?.productModel,
-      status: formData?.status ? "active" : "inactive",
-    };
 
     try {
       if (id) {
         await updateSingleProduct(id, data);
       } else {
-        payload.photo = formData.photo[0]; // Add photo to payload
-        await addProductHandler(payload);
+        await addProductHandler(data);
       }
 
       refetchProducts();
