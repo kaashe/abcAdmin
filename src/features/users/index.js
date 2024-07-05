@@ -77,7 +77,7 @@ function Users() {
     console.log(item, "user");
     event.stopPropagation();
     const payload = {
-      activate: item?.isApproved === true ? false : true,
+      status: item?.isApproved === true ? "Inactive" : "Active",
       isApproved: item?.isApproved === true ? false : true,
     };
     await updateSingleUser(item?._id, payload);
