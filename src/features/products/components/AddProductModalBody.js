@@ -65,12 +65,12 @@ const AddProductModalBody = ({ closeModal }) => {
     for (const key in formData) {
       if (key === "photo" && formData[key][0]) {
         data.append("photo", formData[key][0]); // Append the file directly to FormData
-      } else if (key === "category") {
-        data.append("category", String(formData[key])); // Ensure category is converted to string
       } else {
         data.append(key, formData[key]); // Append other form fields to FormData
       }
     }
+
+    console.log("Form Data:", Object.fromEntries(data.entries())); // Log form data for debugging
 
     try {
       if (id) {
@@ -84,9 +84,9 @@ const AddProductModalBody = ({ closeModal }) => {
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error or show notification
+      dispatch(showNotification({ message: error.message, status: 0 }));
     }
   };
-
   useEffect(() => {
     if (data) {
       reset({
