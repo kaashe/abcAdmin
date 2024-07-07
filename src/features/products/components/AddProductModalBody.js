@@ -13,7 +13,9 @@ import { showNotification } from "../../common/headerSlice";
 
 const AddProductModalBody = ({ closeModal }) => {
   const dispatch = useDispatch();
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit, reset } = useForm({defaultValues:{
+    status: false,
+  }});
   const { data: categories } = useGetCategoriesQuery();
   const allCategory = categories?.data?.categories;
   const categoryOptions = allCategory
@@ -60,8 +62,15 @@ const AddProductModalBody = ({ closeModal }) => {
     }));
   };
   const onSubmit = async (formData) => {
+    // Convert status from true/false to active/inactive
+    if (formData?.status === true) {
+      formData.status = "active";
+    } else if (formData?.status === false) {
+      formData.status = "inactive"; 
+    }
+  
     const data = new FormData();
-
+  
     for (const key in formData) {
       if (key === "photo" && formData[key][0]) {
         data.append("photo", formData[key][0]); // Append the file directly to FormData
@@ -69,16 +78,16 @@ const AddProductModalBody = ({ closeModal }) => {
         data.append(key, formData[key]); // Append other form fields to FormData
       }
     }
-
-    console.log("Form Data:", Object.fromEntries(data.entries())); // Log form data for debugging
-
+  
+    // console.log("Form Data:",formData); // Log form data for debugging
+  
     try {
       if (id) {
         await updateSingleProduct(id, data);
       } else {
         await addProductHandler(data);
       }
-
+  
       refetchProducts();
       closeModal();
     } catch (error) {
@@ -87,6 +96,7 @@ const AddProductModalBody = ({ closeModal }) => {
       dispatch(showNotification({ message: error.message, status: 0 }));
     }
   };
+  
   useEffect(() => {
     if (data) {
       reset({
