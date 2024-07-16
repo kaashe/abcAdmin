@@ -131,7 +131,7 @@ function Products() {
                   <tr
                     key={index}
                     className="cursor-pointer hover"
-                    onClick={() => handleOnRowClick(product)}
+                    // onClick={() => handleOnRowClick(product)}
                   >
                     <td>{index + 1}</td>
                     <td>{product?.productName}</td>
