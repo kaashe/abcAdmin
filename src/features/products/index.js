@@ -98,8 +98,9 @@ function Products() {
             applySearch={applySearch}
             removeAppliedFilter={removeFilter}
           />
+          // test
         }
-      >
+      > 
         <div className="overflow-x-auto w-full">
           {isLoading ? (
               <div className="flex justify-center items-center">
