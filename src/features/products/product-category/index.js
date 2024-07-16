@@ -133,8 +133,8 @@ function ProductCategory() {
                   <thead>
                     <tr>
                       <th>Category Name</th>
-                      <th>Arabic Name</th>
                       <th>Status</th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
