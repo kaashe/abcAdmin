@@ -6,6 +6,7 @@ module.exports = Object.freeze({
     ADD_SIZE: "ADD_SIZE",
     CONFIRMATION: "CONFIRMATION",
     ADD_USER: "ADD_USER",
+    WITHDRAW_DETAILS: "WITHDRAW_DETAILS",
     DEFAULT: "",
   },
   CONFIRMATION_MODAL_CLOSE_TYPES: {
