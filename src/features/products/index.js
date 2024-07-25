@@ -136,7 +136,7 @@ function Products() {
                     <td>{index + 1}</td>
                     <td>{product?.productName}</td>
                     {/* <td>{product?._id}</td> */}
-                    <td>{product?.category.categoryName}</td>
+                    <td>{product?.category?.categoryName}</td>
                     <td>{product?.price}</td>
                     <td>{product?.productReviewPercentage}</td>
                     {/* <td>{product?.photo}</td> */}
