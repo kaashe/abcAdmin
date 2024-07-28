@@ -5,6 +5,7 @@ import AddRolesModalBody from "../features/roles/roles/components/AddRolesModalB
 import AddProductModalBody from "../features/products/components/AddProductModalBody";
 import AddUserModalBody from "../features/users/component/AddUserModalBody";
 import AddProductCategoryModalBody from "../features/products/product-category/components/AddProductCategoryModalBody";
+import WithdrawDetails from "../features/withdraw/component/WithdrawDetails";
 
 function ModalLayout() {
   const { isOpen, bodyType, size, extraObject, title } = useSelector(
@@ -51,6 +52,12 @@ function ModalLayout() {
               ),
               [MODAL_BODY_TYPES.ADD_USER]: (
                 <AddUserModalBody
+                  closeModal={close}
+                  extraObject={extraObject}
+                />
+              ),
+              [MODAL_BODY_TYPES.WITHDRAW_DETAILS]: (
+                <WithdrawDetails
                   closeModal={close}
                   extraObject={extraObject}
                 />
