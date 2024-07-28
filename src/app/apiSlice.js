@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://commerce-api.codematesolution.com/api/v1/",
+    // baseUrl: "https://commerce-api.codematesolution.com/api/v1/",
+    baseUrl: "https://arkindemo.kitchhome.com/api/v1/",
     prepareHeaders: (headers, { getState }) => {
       const token = localStorage.getItem("access_token");
 
