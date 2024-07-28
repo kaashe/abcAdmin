@@ -8,6 +8,8 @@ import TitleCard from "../../components/Cards/TitleCard";
 import { openModal } from "../common/modalSlice";
 import SearchBar from "../../components/Input/SearchBar";
 import { useGetProductsQuery } from "./productsSlice";
+import { AiTwotoneEdit } from "react-icons/ai";
+import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -39,7 +41,7 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
         setSearchText={setSearchText}
       />
       <button
-        className="btn px-6 btn-sm normal-case btn-primary"
+        className="bg-[#6D4E8A] btn px-6 btn-sm normal-case text-white btn-purple"
         onClick={AddProduct}
       >
         Add
@@ -54,7 +56,7 @@ function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const [products, setProducts] = useState(allProducts);
-
+  console.log("Prdouct", products);
   useEffect(() => {
     setProducts(allProducts);
   }, [allProducts]);
@@ -102,7 +104,7 @@ function Products() {
       >
         <div className="overflow-x-auto w-full">
           {isLoading ? (
-              <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center">
               <span className="loading loading-spinner loading-lg text-primary"></span>
             </div>
           ) : isError ? (
@@ -115,9 +117,13 @@ function Products() {
                 <tr>
                   <th>Sr#</th>
                   <th>Product Name</th>
+                  {/* <th>Product ID</th> */}
                   <th>Category</th>
-                  <th>Review %</th>
+                  <th>Product Price</th>
+                  <th>Comission</th>
+                  <th>Image</th>
                   <th>Status</th>
+                  <th>Review %</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,13 +131,40 @@ function Products() {
                   <tr
                     key={index}
                     className="cursor-pointer hover"
-                    onClick={() => handleOnRowClick(product)}
+                    // onClick={() => handleOnRowClick(product)}
                   >
                     <td>{index + 1}</td>
-                    <td>{product.productName}</td>
-                    <td>{product.category.categoryName}</td>
-                    <td>{product.productReviewPercentage}</td>
+                    <td>{product?.productName}</td>
+                    {/* <td>{product?._id}</td> */}
+                    <td>{product?.category?.categoryName}</td>
+                    <td>{product?.price}</td>
+                    <td>{product?.productReviewPercentage}</td>
+                    {/* <td>{product?.photo}</td> */}
+                    <td>
+                      <img
+                        src={product?.photo}
+                        alt={product?.productName}
+                        className="w-16 h-16 object-cover"
+                      />
+                    </td>
                     <td>{product.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-xs btn-square btn-ghost"
+                        onClick={() => handleOnRowClick(product)}
+                      >
+                        <AiTwotoneEdit
+                          style={{ fontSize: "1.2rem" }}
+                          className=" text-success"
+                        />
+                      </button>
+                      <button
+                        className="btn btn-xs btn-square btn-ghost"
+                        // onClick={(event) => handleDelete(item?.id, event)}
+                      >
+                        <TrashIcon className="w-5 text-error" />
+                      </button>{" "}
+                    </td>
                   </tr>
                 ))}
               </tbody>

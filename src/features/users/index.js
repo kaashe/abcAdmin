@@ -39,7 +39,7 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
         setSearchText={setSearchText}
       />
       <button
-        className="btn px-6 btn-sm normal-case btn-primary"
+        className="bg-[#6D4E8A] btn px-6 btn-sm normal-case text-white btn-purple"
         onClick={() => addNewRole()}
       >
         Add
