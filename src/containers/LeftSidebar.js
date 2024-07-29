@@ -21,14 +21,15 @@ function LeftSidebar() {
                 <li className="mb-2 font-semibold text-xl">
 
                     <Link to={'/app/dashboard'}>
-                        <h1 className="text-3xl text-center font-bold ">
+                    <img src="/AH2.png" width="90" />
+                        {/* <h1 className="text-3xl text-center font-bold ">
                             <div className="avatar placeholder">
                                 <div className="bg-neutral text-neutral-content rounded-full w-10">
                                     <span className="text-2xl">A</span>
                                 </div>
                             </div>
                             BC
-                        </h1>
+                        </h1> */}
 
                     </Link>
 
