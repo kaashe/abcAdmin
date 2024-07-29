@@ -6,6 +6,8 @@ import CreditCardIcon from "@heroicons/react/24/outline/CreditCardIcon";
 import ProductsCard from "../../components/Cards/ProductsCard";
 import { useGetProductsQuery } from "../products/productsSlice";
 import { useGetUsersQuery } from "../users/usersSlice";
+import BarChart from './components/BarChart';
+import LineChart from './components/LineChart';
 
 // const statsData = [
 //   {
@@ -90,7 +92,10 @@ console.log("userdata", usersData)
           return <DashboardStats key={k} {...d} colorIndex={k} />;
         })}
       </div>
-
+      <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
+                <LineChart />
+                <BarChart />
+            </div>
       {/** ---------------------- Products Cards Section ------------------------- */}
       {/* <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
       {productsData.map((d, k) => {
