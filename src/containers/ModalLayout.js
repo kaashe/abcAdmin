@@ -6,6 +6,7 @@ import AddProductModalBody from "../features/products/components/AddProductModal
 import AddUserModalBody from "../features/users/component/AddUserModalBody";
 import AddProductCategoryModalBody from "../features/products/product-category/components/AddProductCategoryModalBody";
 import WithdrawDetails from "../features/withdraw/component/WithdrawDetails";
+import SetReviewModal from "../features/users/component/SetReviewModal";
 
 function ModalLayout() {
   const { isOpen, bodyType, size, extraObject, title } = useSelector(
@@ -58,6 +59,12 @@ function ModalLayout() {
               ),
               [MODAL_BODY_TYPES.WITHDRAW_DETAILS]: (
                 <WithdrawDetails
+                  closeModal={close}
+                  extraObject={extraObject}
+                />
+              ),
+              [MODAL_BODY_TYPES.SET_REVIW]: (
+                <SetReviewModal
                   closeModal={close}
                   extraObject={extraObject}
                 />

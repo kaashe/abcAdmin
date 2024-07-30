@@ -12,6 +12,7 @@ import { useUsers } from "../../app/custom-hooks/users/useUsers";
 import { showNotification } from "../common/headerSlice";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -83,6 +84,16 @@ console.log(users,"users")
     // console.log(id, "idddd");
     await deleteSingleUser(id);
   };
+  const setReviewLimitOpen=(id)=>{
+    dispatch(
+      openModal({
+        title: "Set Review Limit",
+        bodyType: MODAL_BODY_TYPES.SET_REVIW,
+        extraObject: { id },
+        // size: "lg",
+      })
+    );
+  }
 
   const applySearch = useCallback(
     (value) => {
@@ -152,6 +163,8 @@ console.log(users,"users")
                   <th>Role</th>
                   <th>Status</th>
                   <th>Action</th>
+                  <th>Review Limit</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -205,6 +218,13 @@ console.log(users,"users")
                           <FaRegTrashAlt
                             className="text-xl text-red-500"
                           />
+                        </button>{" "}
+                      </td>
+                      <td>
+                      <button
+                          className="btn btn-xs btn-square btn-ghost "
+                          onClick={() => setReviewLimitOpen(user?._id)}
+                        > <IoIosAddCircle  className="text-2xl" />
                         </button>{" "}
                       </td>
                     </tr>

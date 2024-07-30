@@ -31,6 +31,14 @@ export const usersSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["users"],
     }),
+    setReview: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `users/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 export const {
@@ -38,4 +46,5 @@ export const {
   useGetSingleUserQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useSetReviewMutation
 } = usersSlice;
