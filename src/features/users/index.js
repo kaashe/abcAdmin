@@ -10,6 +10,8 @@ import SearchBar from "../../components/Input/SearchBar";
 import { useGetUsersQuery } from "./usersSlice";
 import { useUsers } from "../../app/custom-hooks/users/useUsers";
 import { showNotification } from "../common/headerSlice";
+import { FaRegTrashAlt } from "react-icons/fa";
+
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -50,7 +52,15 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
-  const { data: usersData, isLoading, isError, error } = useGetUsersQuery();
+  const { data: usersData, isLoading, isError, error ,refetch} = useGetUsersQuery();
+  const {
+    deleteSingleUser,
+    deleteIsLoading,
+    deleteIsSuccess,
+    deleteIsError,
+    deleteError,
+  }=useUsers();
+
   const allUsers = usersData?.data?.data;
   // Dummy data for users
   const { updateSingleUser, updateIsLoading, updateIsSuccess } = useUsers();
@@ -62,6 +72,10 @@ function Users() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+  const handleDelete = async(id) => {
+    console.log(id,'idddd');
+    await deleteSingleUser(id)
   };
 
   const applySearch = useCallback(
@@ -96,8 +110,11 @@ function Users() {
   useEffect(() => {
     if (updateIsSuccess) {
       dispatch(showNotification({ message: "User Updated!", status: 1 }));
+    }else if(deleteIsSuccess){
+      dispatch(showNotification({ message: "User Deleted!", status: 1 }));
+      refetch();
     }
-  }, [updateIsSuccess, dispatch]);
+  }, [updateIsSuccess, dispatch,refetch,deleteIsSuccess]);
   return (
     <>
       <TitleCard
@@ -128,6 +145,7 @@ function Users() {
                   <th>Balance</th>
                   <th>Role</th>
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -164,6 +182,7 @@ function Users() {
                           />
                         </div>
                       </td>
+                      <td><FaRegTrashAlt onClick={(user)=>handleDelete(user?._id)} className="text-xl text-red-500"/></td>
                     </tr>
                   );
                 })}
