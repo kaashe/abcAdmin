@@ -56,7 +56,7 @@ function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const [products, setProducts] = useState(allProducts);
-  console.log("Prdouct", products);
+  // console.log("Prdouct", products);
   useEffect(() => {
     setProducts(allProducts);
   }, [allProducts]);

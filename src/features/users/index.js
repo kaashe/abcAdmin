@@ -10,8 +10,8 @@ import SearchBar from "../../components/Input/SearchBar";
 import { useGetUsersQuery } from "./usersSlice";
 import { useUsers } from "../../app/custom-hooks/users/useUsers";
 import { showNotification } from "../common/headerSlice";
+import { AiTwotoneEdit } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
-
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -52,20 +52,26 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
-  const { data: usersData, isLoading, isError, error ,refetch} = useGetUsersQuery();
+  const {
+    data: usersData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetUsersQuery();
   const {
     deleteSingleUser,
     deleteIsLoading,
     deleteIsSuccess,
     deleteIsError,
     deleteError,
-  }=useUsers();
+  } = useUsers();
 
   const allUsers = usersData?.data?.data;
   // Dummy data for users
   const { updateSingleUser, updateIsLoading, updateIsSuccess } = useUsers();
   const [users, setUsers] = useState(allUsers);
-
+console.log(users,"users")
   const removeFilter = useCallback(() => {
     setUsers(allUsers);
   }, [allUsers]);
@@ -73,9 +79,9 @@ function Users() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const handleDelete = async(id) => {
-    console.log(id,'idddd');
-    await deleteSingleUser(id)
+  const handleDelete = async (id) => {
+    console.log(id, "idddd");
+    await deleteSingleUser(id);
   };
 
   const applySearch = useCallback(
@@ -110,11 +116,11 @@ function Users() {
   useEffect(() => {
     if (updateIsSuccess) {
       dispatch(showNotification({ message: "User Updated!", status: 1 }));
-    }else if(deleteIsSuccess){
+    } else if (deleteIsSuccess) {
       dispatch(showNotification({ message: "User Deleted!", status: 1 }));
       refetch();
     }
-  }, [updateIsSuccess, dispatch,refetch,deleteIsSuccess]);
+  }, [updateIsSuccess, dispatch, refetch, deleteIsSuccess]);
   return (
     <>
       <TitleCard
@@ -154,7 +160,7 @@ function Users() {
                     <tr
                       key={index}
                       className="cursor-pointer hover"
-                      onClick={() => handleOnRowClick(user)}
+                      // onClick={() => handleOnRowClick(user)}
                     >
                       <td>{index + 1}</td>
                       <td>{user.fullname}</td>
@@ -182,7 +188,25 @@ function Users() {
                           />
                         </div>
                       </td>
-                      <td><FaRegTrashAlt onClick={(user)=>handleDelete(user?._id)} className="text-xl text-red-500"/></td>
+                      <td>
+                        <button
+                          className="btn btn-xs btn-square btn-ghost"
+                          onClick={() => handleOnRowClick(user)}
+                          >
+                          <AiTwotoneEdit
+                            style={{ fontSize: "1.2rem" }}
+                            className=" text-success"
+                          />
+                        </button>
+                        <button
+                          className="btn btn-xs btn-square btn-ghost"
+                          onClick={() => handleDelete(user?._id)}
+                        >
+                          <FaRegTrashAlt
+                            className="text-xl text-red-500"
+                          />
+                        </button>{" "}
+                      </td>
                     </tr>
                   );
                 })}
