@@ -7,6 +7,7 @@ import { useUsers } from "../../../app/custom-hooks/users/useUsers";
 import { showNotification } from "../../common/headerSlice";
 import { useGetSingleUserQuery } from "../usersSlice";
 import FileInput from "../../../components/Input/FileInput";
+import SelectBox from "../../../components/Input/SelectBox";
 
 const AddUserModalBody = ({ closeModal }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const AddUserModalBody = ({ closeModal }) => {
     updateIsError,
     updateError,
   } = useUsers();
-  const { control, handleSubmit, reset, getValues } = useForm();
+  const { control, handleSubmit,errors, reset, getValues } = useForm();
   const {
     data,
     isLoading: isSingleUserLoading,
@@ -188,18 +189,16 @@ const AddUserModalBody = ({ closeModal }) => {
               rules={{ required: "CNIC is required" }}
             />
           )}
-          <Controller
-            name="gender"
-            control={control}
-            rules={{ required: "Gender is required" }}
-            render={({ field }) => (
-              <select {...field} className="select select-bordered w-full mt-2">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            )}
-          />
+          <SelectBox
+              name="action"
+              labelTitle={"Select Gender"}
+              containerStyle="w-full mt-4"
+              placeholder={"Select Gender"}
+              labelStyle="my-label-style"
+              options={[{value:"male",label:"Male"},{value:"femmale",label:"female"},{value:"other",label:"Other"}]}
+              control={control}
+              rules={{ required: "Gender is required" }}
+            />
           <InputText
             name="address"
             labelTitle="Address"

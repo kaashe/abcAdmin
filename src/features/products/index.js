@@ -10,6 +10,8 @@ import SearchBar from "../../components/Input/SearchBar";
 import { useGetProductsQuery } from "./productsSlice";
 import { AiTwotoneEdit } from "react-icons/ai";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
+import { useProduct } from "../../app/custom-hooks/products/useproducts";
+import { showNotification } from "../common/headerSlice";
 
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -51,7 +53,15 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 };
 
 function Products() {
+  
   const { data, refetch, isLoading, isError, error } = useGetProductsQuery();
+  const {
+    deleteSingleProduct,
+    deleteProductIsLoading,
+    deleteProductIsSuccess,
+    deleteProductIsError,
+    deleteProductError,
+  } = useProduct();
   const allProducts = data?.data?.products || [];
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
@@ -67,6 +77,10 @@ function Products() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+  const handleDelete = async (id) => {
+    console.log(id, "idddd");
+    await deleteSingleProduct(id);
   };
 
   const applySearch = useCallback(
@@ -89,7 +103,12 @@ function Products() {
       })
     );
   };
-
+  useEffect(() => {
+    if (deleteProductIsSuccess) {
+      dispatch(showNotification({ message: "Product Deleted!", status: 1 }));
+      refetch()
+    } 
+  }, [deleteProductIsSuccess]);
   return (
     <>
       <TitleCard
@@ -159,9 +178,10 @@ function Products() {
                         />
                       </button>
                       <button
+                      disabled={deleteProductIsLoading}
                         className="btn btn-xs btn-square btn-ghost"
-                        // onClick={(event) => handleDelete(item?.id, event)}
-                      >
+                        onClick={() => handleDelete(product?._id)}
+                        >
                         <TrashIcon className="w-5 text-error" />
                       </button>{" "}
                     </td>

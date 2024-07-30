@@ -80,7 +80,7 @@ console.log(users,"users")
     setCurrentPage(page);
   };
   const handleDelete = async (id) => {
-    console.log(id, "idddd");
+    // console.log(id, "idddd");
     await deleteSingleUser(id);
   };
 

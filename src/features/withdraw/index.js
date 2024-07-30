@@ -158,14 +158,14 @@ const Withdraw = () => {
                       />
                     </div>
                   </td>
-                  <td>
+                  {/* <td>
                     <button
                       className="btn btn-sm btn-square btn-ghost"
                       // onClick={(event) => handleDelete(withdraw?._id, event)}
                     >
                       <TrashIcon className="w-5 text-error" />
                     </button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

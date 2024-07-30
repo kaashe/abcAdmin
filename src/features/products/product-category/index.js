@@ -11,6 +11,9 @@ import { openModal } from "../../common/modalSlice";
 import SearchBar from "../../../components/Input/SearchBar";
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 import Pagination from "../../../components/Pagination/Pagination";
+import { useProductCategory } from "../../../app/custom-hooks/products-category/useProductCategory";
+import { showNotification } from "../../common/headerSlice";
+import { AiTwotoneEdit } from "react-icons/ai";
 const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
   const [searchText, setSearchText] = useState("");
   const dispatch = useDispatch();
@@ -50,11 +53,26 @@ const TopSideButtons = ({ removeAppliedFilter, applySearch }) => {
 
 function ProductCategory() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isError, isLoading, error } = useGetCategoriesQuery(currentPage);
+  const { data, isError, isLoading, error , refetch } = useGetCategoriesQuery(currentPage);
   const allCategories = data?.data?.categories;
   const totalPages = data?.totalPages;
   const [categories, setCategories] = useState(allCategories);
   const dispatch = useDispatch();
+
+  const {
+    updateSingleCategory,
+    updateIsLoading,
+    updateIsSuccess,
+    updateIsError,
+    updateError,
+    deleteSingleCategory,
+    deleteCategoryIsLoading,
+    deleteCategoryIsSuccess,
+    deleteCategoryIsError,
+    deleteCategoryError,
+  } = useProductCategory();
+
+
 
   useEffect(() => {
     setCategories(allCategories);
@@ -77,7 +95,8 @@ function ProductCategory() {
     [allCategories]
   );
   const handleOnRowClick = (category) => {
-    const categoryId = category?.id;
+    const categoryId = category?._id;
+    console.log(category,"category")
     dispatch(
       openModal({
         title: "Edit Product Category",
@@ -86,20 +105,33 @@ function ProductCategory() {
       })
     );
   };
-  const handleDelete = (id, event) => {
-    event.stopPropagation();
-    dispatch(
-      openModal({
-        title: "Confirmation",
-        bodyType: MODAL_BODY_TYPES.CONFIRMATION,
-        extraObject: {
-          message: `Are you sure you want to delete this Category?`,
-          type: CONFIRMATION_MODAL_CLOSE_TYPES.PRODUCT_CATEGORY_DELETE,
-          id,
-        },
-      })
-    );
+  const handleDelete = async (id) => {
+    // console.log(id, "idddd");
+    await deleteSingleCategory(id);
   };
+  useEffect(() => {
+    // if (updateIsSuccess) {
+    //   dispatch(showNotification({ message: "User Updated!", status: 1 }));
+    // } else
+     if (deleteCategoryIsSuccess) {
+      dispatch(showNotification({ message: "User Deleted!", status: 1 }));
+      refetch();
+    }
+  }, [ dispatch, refetch, deleteCategoryIsSuccess]);
+  // const handleDelete = (id, event) => {
+  //   event.stopPropagation();
+  //   dispatch(
+  //     openModal({
+  //       title: "Confirmation",
+  //       bodyType: MODAL_BODY_TYPES.CONFIRMATION,
+  //       extraObject: {
+  //         message: `Are you sure you want to delete this Category?`,
+  //         type: CONFIRMATION_MODAL_CLOSE_TYPES.PRODUCT_CATEGORY_DELETE,
+  //         id,
+  //       },
+  //     })
+  //   );
+  // };
 
   return (
     <>
@@ -144,15 +176,23 @@ function ProductCategory() {
                           <tr
                             key={index}
                             className="cursor-pointer hover"
-                            onClick={() => handleOnRowClick(item)}
                           >
                             <td>{item?.categoryName}</td>
-                            <td>{item?.status === true ? "Active" : "Inactive"}</td>
+                            <td>{item?.status === "active" ? "Active" : "Inactive"}</td>
 
                             <td>
+                            <button
+                          className="btn btn-xs btn-square btn-ghost"
+                          onClick={() => handleOnRowClick(item)}
+                          >
+                          <AiTwotoneEdit
+                            style={{ fontSize: "1.2rem" }}
+                            className=" text-success"
+                          />
+                        </button>
                               <button
                                 className="btn btn-xs btn-square btn-ghost"
-                                onClick={(event) => handleDelete(item?.id, event)}
+                                onClick={(event) => handleDelete(item?._id, event)}
                               >
                                 <TrashIcon className="w-5 text-error" />
                               </button>

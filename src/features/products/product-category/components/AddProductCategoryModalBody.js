@@ -34,6 +34,7 @@ function AddProductCategoryModalBody({ closeModal }) {
     error: singleCategoryError,
     refetch: singleCategoryRefetch,
   } = useGetSingleCategoryQuery(id, { skip: !id });
+  console.log(data,"data")
 
   const { control, handleSubmit, reset, setValue } = useForm();
 
@@ -61,7 +62,7 @@ function AddProductCategoryModalBody({ closeModal }) {
 
   useEffect(() => {
     if (data) {
-      reset(data);
+      reset({name:data?.data?.category?.categoryName,isActive:data?.data?.category?.status==="active"?true:false});
     }
   }, [data, reset]);
 
