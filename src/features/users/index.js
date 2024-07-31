@@ -72,7 +72,7 @@ function Users() {
   // Dummy data for users
   const { updateSingleUser, updateIsLoading, updateIsSuccess } = useUsers();
   const [users, setUsers] = useState(allUsers);
-console.log(users,"users")
+// console.log(users,"users")
   const removeFilter = useCallback(() => {
     setUsers(allUsers);
   }, [allUsers]);
@@ -105,7 +105,7 @@ console.log(users,"users")
     [allUsers]
   );
   const handleStatus = async (item, event) => {
-    console.log(item, "user");
+    // console.log(item, "user");
     event.stopPropagation();
     const payload = {
       status: item?.isApproved === true ? "Inactive" : "Active",
@@ -182,7 +182,7 @@ console.log(users,"users")
                       <td>
                         <div
                           className={`tooltip ${
-                            user?.isActive === true
+                            user?.isActive  === true
                               ? "tooltip-error"
                               : "tooltip-success"
                           }`}

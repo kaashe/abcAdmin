@@ -37,7 +37,7 @@ const AddUserModalBody = ({ closeModal }) => {
     skip: !id,
   });
   const [formData, setFormData] = useState();
-  console.log("selected image", formData);
+  // console.log("selected image", formData);
   const handleImageChange = (event) => {
     const imageFile = event.target.files[0];
     setFormData((prevFormData) => ({
@@ -57,8 +57,8 @@ const AddUserModalBody = ({ closeModal }) => {
     }
 
     if (id) {
+      await updateSingleUser(id, formData);
       console.log(data, "updata");
-      await updateSingleUser(id, data);
     } else {
       await createUser(data);
     }
@@ -156,14 +156,14 @@ const AddUserModalBody = ({ closeModal }) => {
               />
             </>
           )}
-          <FileInput
+          {!id && <FileInput
             labelTitle="Upload Photo"
             name="photo"
             onChange={handleImageChange}
             control={control}
             rules={{ required: "Photo is required" }}
             placeholder="Choose image..."
-          />
+          />}
           {id && (
             <InputNumber
               name="balance"
@@ -213,6 +213,15 @@ const AddUserModalBody = ({ closeModal }) => {
               containerStyle="mt-4"
               control={control}
               rules={{ required: "Education is required" }}
+            />
+          )}
+                    {!id && (
+            <InputText
+              name="stuckreviews"
+              labelTitle="Stuckreviews"
+              containerStyle="mt-4"
+              control={control}
+              // rules={{ required: "Education is required" }}
             />
           )}
           <div className="modal-action">
