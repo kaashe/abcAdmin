@@ -44,7 +44,14 @@ if(isSuccess){
             <LandingIntro />
           </div>
           <div className="py-20 px-10">
-            <h2 className="text-2xl font-semibold mb-2 text-center">Sign In</h2>
+          <div className=" font-semibold  text-center">
+          <img
+              src="./AH1.png"
+              alt="User Dashboard"
+              className="w-48 inline-block rounded-full"
+              ></img>
+              </div>
+            {/* <h2 className="text-2xl font-semibold mb-2 text-center">Sign In</h2> */}
             <form onSubmit={handleSubmit(submitForm)}>
               <div className="mb-4">
                 <div className={`form-control w-full`}>

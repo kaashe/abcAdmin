@@ -26,7 +26,7 @@ const AddUserModalBody = ({ closeModal }) => {
     updateIsError,
     updateError,
   } = useUsers();
-  const { control, handleSubmit,errors, reset, getValues } = useForm();
+  const { control, handleSubmit, errors, reset, getValues } = useForm();
   const {
     data,
     isLoading: isSingleUserLoading,
@@ -156,14 +156,16 @@ const AddUserModalBody = ({ closeModal }) => {
               />
             </>
           )}
-          {!id && <FileInput
-            labelTitle="Upload Photo"
-            name="photo"
-            onChange={handleImageChange}
-            control={control}
-            rules={{ required: "Photo is required" }}
-            placeholder="Choose image..."
-          />}
+          {!id && (
+            <FileInput
+              labelTitle="Upload Photo"
+              name="photo"
+              onChange={handleImageChange}
+              control={control}
+              rules={{ required: "Photo is required" }}
+              placeholder="Choose image..."
+            />
+          )}
           {id && (
             <InputNumber
               name="balance"
@@ -190,15 +192,19 @@ const AddUserModalBody = ({ closeModal }) => {
             />
           )}
           <SelectBox
-              name="action"
-              labelTitle={"Select Gender"}
-              containerStyle="w-full mt-4"
-              placeholder={"Select Gender"}
-              labelStyle="my-label-style"
-              options={[{value:"male",label:"Male"},{value:"femmale",label:"female"},{value:"other",label:"Other"}]}
-              control={control}
-              rules={{ required: "Gender is required" }}
-            />
+            name="action"
+            labelTitle={"Select Gender"}
+            containerStyle="w-full mt-4"
+            placeholder={"Select Gender"}
+            labelStyle="my-label-style"
+            options={[
+              { value: "male", label: "Male" },
+              { value: "femmale", label: "female" },
+              { value: "other", label: "Other" },
+            ]}
+            control={control}
+            rules={{ required: "Gender is required" }}
+          />
           <InputText
             name="address"
             labelTitle="Address"
@@ -215,7 +221,7 @@ const AddUserModalBody = ({ closeModal }) => {
               rules={{ required: "Education is required" }}
             />
           )}
-                    {!id && (
+          {/* {!id && (
             <InputText
               name="stuckreviews"
               labelTitle="Stuckreviews"
@@ -223,7 +229,7 @@ const AddUserModalBody = ({ closeModal }) => {
               control={control}
               // rules={{ required: "Education is required" }}
             />
-          )}
+          )} */}
           <div className="modal-action">
             <button
               type="button"

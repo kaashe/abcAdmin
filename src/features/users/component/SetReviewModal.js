@@ -43,6 +43,27 @@ const SetReviewModal = ({closeModal}) => {
           control={control}
           rules={{ required: "Reviews Allowed is required" }}
         />
+         <InputNumber
+          name="Stuck Review"
+          labelTitle="Stuck Review"
+          containerStyle="mt-4"
+          control={control}
+          rules={{ required: "Stuck Allowed is required" }}
+        />
+        <InputNumber
+          name="Commision"
+          labelTitle="Commision"
+          containerStyle="mt-4"
+          control={control}
+          rules={{ required: "Commision is required" }}
+        />
+        <InputNumber
+          name="Required Deposite"
+          labelTitle="Required Deposite"
+          containerStyle="mt-4"
+          control={control}
+          rules={{ required: "Commision is required" }}
+        />
         <div className="modal-action">
           <button
             type="button"
