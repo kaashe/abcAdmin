@@ -14,6 +14,7 @@ const SetReviewModal = ({closeModal}) => {
   const dispatch = useDispatch();
   const onSubmit = async (data) => {
     // console.log(id,'iddd')
+    data.Stuck_Review=Number(data.Stuck_Review)
     // console.log(data,'data')
     await setReview({id, data});
     closeModal();
@@ -44,21 +45,21 @@ const SetReviewModal = ({closeModal}) => {
           rules={{ required: "Reviews Allowed is required" }}
         />
          <InputNumber
-          name="Stuck Review"
+          name="stuckreviews"
           labelTitle="Stuck Review"
           containerStyle="mt-4"
           control={control}
           rules={{ required: "Stuck Allowed is required" }}
         />
         <InputNumber
-          name="Commision"
+          name="stuckcommission"
           labelTitle="Commision"
           containerStyle="mt-4"
           control={control}
           rules={{ required: "Commision is required" }}
         />
         <InputNumber
-          name="Required Deposite"
+          name="requiredDeposite"
           labelTitle="Required Deposite"
           containerStyle="mt-4"
           control={control}
