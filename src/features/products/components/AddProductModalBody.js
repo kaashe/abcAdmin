@@ -145,6 +145,12 @@ const AddProductModalBody = ({ closeModal }) => {
             rules={{ required: "Category Type is required" }}
           />
           <InputText
+            name="productReviewPercentage"
+            labelTitle="Product Percentage"
+            control={control}
+            rules={{ required: "Product Percentage is required" }}
+          />
+          <InputText
             name="price"
             labelTitle="Price"
             control={control}
