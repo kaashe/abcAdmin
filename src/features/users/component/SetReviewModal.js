@@ -38,7 +38,7 @@ const SetReviewModal = ({closeModal}) => {
 
   const onSubmit = async (data) => {
     // console.log(id,'iddd')
-    data.Stuck_Review=Number(data.Stuck_Review)
+    // data.Stuck_Review=Number(data.Stuck_Review)
     // console.log(data,'data')
     await setReview({id, data});
     closeModal();
