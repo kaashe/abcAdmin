@@ -128,6 +128,7 @@ const Withdraw = () => {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Payment Method</th>
+                <th>wallet Address</th>
                 <th>Status</th>
                 <th>Approve</th>
               </tr>
@@ -140,6 +141,7 @@ const Withdraw = () => {
                   <td>{withdraw?.name}</td>
                   <td>{withdraw?.email}</td>
                   <td>{withdraw?.payment || withdraw?.paymentMethod}</td>
+                  <td>{withdraw?.walletAddress}</td>
                   <td>{withdraw?.status}</td>
                   <td>
                     <div

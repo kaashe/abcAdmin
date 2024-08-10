@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSetReviewMutation } from "../usersSlice";
+import { useGetSingleUserQuery, useSetReviewMutation } from "../usersSlice";
 import { useForm } from "react-hook-form";
 import InputNumber from "../../../components/Input/InputNumber";
 import { showNotification } from "../../common/headerSlice";
@@ -8,10 +8,34 @@ import { showNotification } from "../../common/headerSlice";
 const SetReviewModal = ({closeModal}) => {
   const { extraObject } = useSelector((state) => state.modal);
   const id = extraObject?.id;
-//   console.log(id);
+  console.log(id);
   const { control, handleSubmit, errors, reset, getValues } = useForm();
   const [setReview, { isLoading, isSuccess }] = useSetReviewMutation();
   const dispatch = useDispatch();
+  const {
+    data,
+    isLoading: isSingleUserLoading,
+    isError: singleUserIsError,
+    error: singleUserError,
+    refetch,
+  } = useGetSingleUserQuery(id, {
+    skip: !id,
+  });
+  console.log("first", data)
+  const previousfielddata = data?.data?.data
+  console.log("previousfielddata", previousfielddata)
+  useEffect(() => {
+    if (data) {
+      // Reset the form with fetched data
+      reset({
+        reviewsAllowed: data?.data?.data?.reviewsAllowed || '',
+        stuckreviews: data?.data?.data?.stuckreviews || '',
+        stuckcommission: data?.data?.data?.stuckcommission || '',
+        requiredDeposite: data?.data?.data?.requiredDeposite || '',
+      });
+    } 
+  }, [data, reset]);
+
   const onSubmit = async (data) => {
     // console.log(id,'iddd')
     data.Stuck_Review=Number(data.Stuck_Review)
@@ -21,6 +45,7 @@ const SetReviewModal = ({closeModal}) => {
   };
   useEffect(() => {
  if (isSuccess) {
+  refetch();
       dispatch(
         showNotification({
           message: "User Updated!",
@@ -29,8 +54,8 @@ const SetReviewModal = ({closeModal}) => {
       );
     //   refetchUsers();
       closeModal();
-    }
-  });
+    } 
+  }, [isSuccess, dispatch, closeModal, refetch]);
   return (
     <div>
       <form
@@ -49,21 +74,21 @@ const SetReviewModal = ({closeModal}) => {
           labelTitle="Stuck Review"
           containerStyle="mt-4"
           control={control}
-          rules={{ required: "Stuck Allowed is required" }}
+          // rules={{ required: "Stuck Allowed is required" }}
         />
         <InputNumber
           name="stuckcommission"
           labelTitle="Commision"
           containerStyle="mt-4"
           control={control}
-          rules={{ required: "Commision is required" }}
+          // rules={{ required: "Commision is required" }}
         />
         <InputNumber
           name="requiredDeposite"
           labelTitle="Required Deposite"
           containerStyle="mt-4"
           control={control}
-          rules={{ required: "Commision is required" }}
+          // rules={{ required: "Commision is required" }}
         />
         <div className="modal-action">
           <button
