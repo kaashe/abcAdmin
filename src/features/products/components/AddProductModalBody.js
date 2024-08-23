@@ -128,7 +128,7 @@ const AddProductModalBody = ({ closeModal }) => {
             control={control}
             rules={{ required: "Name is required" }}
           />
-          <SelectBox
+          {/* <SelectBox
             name="category"
             labelTitle="Select Category"
             containerStyle="w-full mt-4"
@@ -137,13 +137,13 @@ const AddProductModalBody = ({ closeModal }) => {
             options={categoryOptions}
             control={control}
             rules={{ required: "Category is required" }}
-          />
-          <InputText
+          /> */}
+          {/* <InputText
             name="productType"
             labelTitle="Category Type"
             control={control}
             rules={{ required: "Category Type is required" }}
-          />
+          /> */}
           <InputText
             name="productReviewPercentage"
             labelTitle="Product Percentage"
@@ -162,12 +162,12 @@ const AddProductModalBody = ({ closeModal }) => {
             control={control}
             rules={{ required: "Description is required" }}
           />
-          <InputText
+          {/* <InputText
             name="productModel"
             labelTitle="Product Model"
             control={control}
             rules={{ required: "Product Model is required" }}
-          />
+          /> */}
           <FileInput
             labelTitle="Upload Photo"
             name="photo"
