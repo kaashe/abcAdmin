@@ -164,7 +164,9 @@ function ProductCategory() {
                 <table className="table w-full">
                   <thead>
                     <tr>
+                    <th>S.No</th> 
                       <th>Category Name</th>
+                      <th>Images</th>
                       <th>Status</th>
                       <th>Delete</th>
                     </tr>
@@ -177,7 +179,9 @@ function ProductCategory() {
                             key={index}
                             className="cursor-pointer hover"
                           >
+                            <td>{index + 1}</td>
                             <td>{item?.categoryName}</td>
+                            <td>{item?.photo}</td>
                             <td>{item?.status === "active" ? "Active" : "Inactive"}</td>
 
                             <td>
